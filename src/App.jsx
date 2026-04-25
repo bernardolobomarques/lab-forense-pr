@@ -103,7 +103,7 @@ function App() {
           <div className="input-group">
             <input 
               type="text" 
-              placeholder="Ex: #AMX-09" 
+              placeholder="INSERIR CÓDIGO DA AMOSTRA" 
               value={evidenceInput} 
               onChange={(e) => setEvidenceInput(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && fetchEvidence()}
@@ -126,7 +126,7 @@ function App() {
           <div className="input-group">
             <input 
               type="text" 
-              placeholder="Ex: PR-SOU-310" 
+              placeholder="CÓDIGO DE GENÉTICA (CODIS)" 
               value={suspectInput} 
               onChange={(e) => setSuspectInput(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && fetchSuspect()}
@@ -171,22 +171,22 @@ function App() {
 
               {analysisResult.match && analysisResult.ev.id === '#AMX-09' && (
                 <div className="trap-message">
-                  <strong>⚠️ ALERTA DO DETETIVE: O RED HERRING</strong>
-                  <br/>Parece a prova final, não é? No entanto, leia o laudo com atenção. Ao redor de conflito letal, a saliva seria por gotículas ou sangue, não uma gota densa limpa caindo intacta no assento. Esta amostra de Marcelo foi INTENCIONALMENTE PLANTADA pelo mandante no carro.
+                  <strong>⚠️ DIAGNÓSTICO DO SISTEMA PERICIAL: ANOMALIA ESTRUTURAL</strong>
+                  <br/>Alerta de Contaminação Secundária. A análise de dispersão do tecido coletado indica ausência absoluta de gotículas satélites ou dispersão aerossolizada (espirro/fala). A densidade e o formato perfeitamente circular de 98% de concentração no epicentro do banco de superfície apontam para <span style={{color: 'red', fontWeight: 'bold'}}>TRANSFERÊNCIA DINÂMICA ARTIFICIAL</span> (depósito com instrumento médico, pipeta ou swab forçado). Aconselha-se suspensão de inquérito imediato sobre a fonte biológica primária.
                 </div>
               )}
 
               {analysisResult.match && analysisResult.ev.id === '#FIO-11' && (
                 <div className="trap-message">
-                  <strong>⚠️ ALERTA DO DETETIVE: O FURTO</strong>
-                  <br/>O cabelo pertencer a Lúcia comprova apenas que ela esteve revirando o carro. Corrobora a teoria de que ela furtou algo do veículo, mas estrangular alguém por trás usando as próprias mãos requer força bruta e altura, algo improvável para ela, e não explica o abandono do carro no Porto Seco.
+                  <strong>⚠️ DIAGNÓSTICO DO SISTEMA PERICIAL: INSUFICIÊNCIA CAUSAL</strong>
+                  <br/>O sequenciamento genético mitocondrial confirmou a identidade do folículo predatório na mala do veículo automotor. Perícia mecânica constata ausência de dano no bulbo (Sem traços de puxão). O cruzamento temporal atesta invasão civil ao automóvel com finalidade de extração material (furto). Todavia, o laudo legista N-4A demanda Força Opositora Maior de no mínimo uma alavanca de 40 quilogramas para laceração do hióide. O Indivíduo CODIS cruzado apresenta deficiência de biotipo para execução.
                 </div>
               )}
 
               {analysisResult.match && analysisResult.ev.id === '#CIG-44' && (
                 <div className="trap-message">
-                  <strong>⚠️ ALERTA DO DETETIVE: O ASSASSINO FÍSICO</strong>
-                  <br/>A descoberta do cigarro na cena com o DNA do Borracheiro (Graxa) isola a responsabilidade física. Ele asfixiou Elisa. Mas por que razão o matador de um Porto Seco emboscaria a secretária distante? Fica claro a atuação de MATADOR DE ALUGUEL. A questão é: Quem enriquece com ela morta? Quem plantou o isqueiro perto dele? Procure falhas graves no pretenso álibi perfeito de internet.
+                  <strong>⚠️ CONCLUSÃO SISTÊMICA: PRESENÇA CONFIRMADA NO PERÍMETRO</strong>
+                  <br/>A reação em cadeia de polimerase (PCR) na salivação impregnada no filtro de celulose correlaciona o indivíduo cadastrado à cena geográfica de abandono do veículo (distância relativa de 4 metros). A execução por via compressiva enquadra-se no biotipo mecânico laboral do indivíduo. AVISO: Indícios apontam contratação de terceiros logísticos devido à incompatibilidade sócio-econômica motivacional e financeira com a vítima titular (Ausência de dolo prévio).
                 </div>
               )}
 
