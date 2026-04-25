@@ -20,7 +20,6 @@ h1 {
   font-size: 2.5rem;
   text-transform: uppercase;
   color: var(--medical-dark);
-  letter-spacing: 1px;
 }
 
 .system-id {
@@ -28,6 +27,22 @@ h1 {
   color: var(--text-dim);
   font-size: 1rem;
   font-weight: bold;
+}
+
+.error-bar {
+  background: var(--alert-red);
+  color: white;
+  padding: 15px;
+  text-align: center;
+  font-family: var(--font-mono);
+  border-radius: 4px;
+  margin-bottom: 2rem;
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .lab-grid {
@@ -52,77 +67,86 @@ h1 {
   padding-bottom: 10px;
   margin-top: 0;
   margin-bottom: 1rem;
-  text-transform: uppercase;
 }
 
-/* Amostras Desconhecidas */
-.sample-card {
-  border: 2px dashed var(--medical-blue);
+.helper-text {
+  font-size: 0.85rem;
+  color: var(--text-dim);
+  margin-bottom: 10px;
+}
+
+.input-group {
+  display: flex;
+  margin-bottom: 20px;
+}
+
+.input-group input {
+  flex: 1;
+  padding: 12px;
+  border: 1px solid var(--border-color);
+  border-right: none;
+  border-radius: 4px 0 0 4px;
+  font-family: var(--font-mono);
+  font-size: 1.1rem;
+  text-transform: uppercase;
+  outline: none;
+}
+
+.input-group input:focus {
+  border-color: var(--medical-blue);
   background: rgba(14, 165, 233, 0.05);
+}
+
+.input-group button {
+  padding: 12px 25px;
+  background: var(--text-main);
+  color: white;
+  border: none;
+  font-family: var(--font-head);
+  border-radius: 0 4px 4px 0;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.input-group button:hover {
+  background: var(--medical-dark);
+}
+
+.loaded-card {
+  border: 2px dashed var(--medical-blue);
+  background: rgba(14, 165, 233, 0.1);
   padding: 1rem;
   border-radius: 6px;
   text-align: center;
-  margin-bottom: 1.5rem;
-  cursor: pointer;
-  transition: all 0.2s;
+  margin-bottom: 1rem;
+  animation: fadeIn 0.4s;
 }
 
-.sample-card.selected {
-  border-style: solid;
-  background: rgba(14, 165, 233, 0.2);
-  transform: scale(1.02);
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
-.sample-name {
+.loaded-card .tag {
   font-weight: bold;
   font-size: 1.2rem;
+  color: var(--medical-dark);
   margin-bottom: 5px;
 }
 
-.dna-seq {
-  font-family: var(--font-mono);
-  letter-spacing: 2px;
-  color: var(--medical-dark);
-  font-size: 1.1rem;
-  word-break: break-all;
-}
-
-/* Lista de Suspeitos */
-.suspect-list {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.suspect-card {
-  border: 1px solid var(--border-color);
-  padding: 12px;
-  border-radius: 6px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.suspect-card:hover {
-  background: var(--bg-color);
-}
-
-.suspect-card.selected {
-  border-color: var(--medical-dark);
-  background: rgba(3, 105, 161, 0.05);
-  border-left: 5px solid var(--medical-dark);
-}
-
-.s-name {
-  font-weight: bold;
-}
-
-.s-seq {
-  font-family: var(--font-mono);
+.loaded-card .desc {
   font-size: 0.85rem;
   color: var(--text-dim);
+  margin-bottom: 10px;
+}
+
+.loaded-card .seq {
+  font-family: var(--font-mono);
+  letter-spacing: 2px;
+  background: white;
+  padding: 5px;
+  border-radius: 4px;
+  border: 1px solid var(--border-color);
 }
 
 /* Área de Controle Central */
@@ -134,7 +158,6 @@ h1 {
   background: var(--panel-bg);
   border-radius: 8px;
   border: 1px solid var(--border-color);
-  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
 }
 
 .btn-analyze {
@@ -144,27 +167,28 @@ h1 {
   padding: 15px 40px;
   font-size: 1.2rem;
   font-family: var(--font-head);
-  text-transform: uppercase;
   border-radius: 30px;
   cursor: pointer;
-  box-shadow: 0 4px 15px rgba(14, 165, 233, 0.4);
   transition: all 0.2s;
 }
 
-.btn-analyze:hover {
+.btn-analyze:not(:disabled):hover {
   background: var(--medical-dark);
   transform: translateY(-2px);
 }
 
 .btn-analyze:disabled {
   background: var(--border-color);
-  box-shadow: none;
   cursor: not-allowed;
-  transform: none;
 }
 
-/* Modal de Resultado (Plot Twist 1) */
-.modal-overlay {
+.btn-analyze.loading {
+  background: #f59e0b;
+  cursor: wait;
+}
+
+/* Overlay & Modais */
+.popup-overlay {
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
   background: rgba(0,0,0,0.8);
@@ -175,26 +199,48 @@ h1 {
   backdrop-filter: blur(5px);
 }
 
+.popup-content {
+  background: var(--panel-bg);
+  padding: 2.5rem;
+  border-radius: 8px;
+  max-width: 500px;
+  border-top: 5px solid var(--medical-blue);
+}
+
+.popup-content h2 {
+  margin-top: 0;
+  color: var(--medical-dark);
+}
+
+.btn-modal {
+  width: 100%;
+  padding: 15px;
+  background: var(--medical-dark);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-family: var(--font-head);
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+
+.btn-modal:hover {
+  background: var(--medical-blue);
+}
+
 .result-card {
   background: var(--panel-bg);
   width: 90%;
   max-width: 600px;
   border-radius: 8px;
   overflow: hidden;
-  box-shadow: 0 25px 50px rgba(0,0,0,0.5);
   animation: slideIn 0.5s ease-out;
 }
 
-@keyframes slideIn {
-  from { transform: translateY(-50px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
-}
-
 .result-header {
-  background: var(--medical-dark);
-  color: white;
   padding: 1.5rem;
   text-align: center;
+  color: white;
   font-family: var(--font-head);
 }
 
@@ -234,23 +280,5 @@ h1 {
   font-size: 0.95rem;
   line-height: 1.6;
   color: #856404;
-  border-radius: 0 8px 8px 0;
-}
-
-.trap-message strong {
-  font-family: var(--font-head);
-  text-transform: uppercase;
-  font-size: 1.1rem;
-}
-
-.btn-close {
-  background: var(--text-dim);
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  margin-top: 2rem;
   border-radius: 4px;
-  cursor: pointer;
-  font-family: var(--font-sans);
-  font-weight: bold;
 }
