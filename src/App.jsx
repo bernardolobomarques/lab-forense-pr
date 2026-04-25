@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import './App.css'
 
 function App() {
@@ -9,8 +9,8 @@ function App() {
   const [selectedSuspect, setSelectedSuspect] = useState(null);
   const [loading, setLoading] = useState(false);
   const [analysisResult, setAnalysisResult] = useState(null);
-  const [showTutorial, setShowTutorial] = useState(true);
   const [errorMsg, setErrorMsg] = useState('');
+  const [bootStep, setBootStep] = useState(0);
 
   const evidences = [
     { id: '#AMX-09', name: 'AMOSTRA #AMX-09', desc: 'Saliva densa (Encosto do Passageiro)', sequence: 'ATCG-GCTA-TAAC' },
@@ -61,6 +61,8 @@ function App() {
         ev: selectedEvidence, 
         susp: selectedSuspect 
       });
+      // Salva progresso na rede de evidências do HUB
+      localStorage.setItem('ev_dna', 'true');
     }, 2000);
   };
 
@@ -68,30 +70,37 @@ function App() {
     setAnalysisResult(null);
   };
 
+  useEffect(() => {
+    if (bootStep < 3) {
+      const timer = setTimeout(() => {
+        setBootStep(prev => prev + 1);
+      }, 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [bootStep]);
+
+  if (bootStep < 3) {
+    return (
+      <div className="lab-container" style={{display: 'flex', flexDirection: 'column', justifyContent: 'center', height: '100vh', fontFamily: 'var(--font-mono)'}}>
+        <div style={{color: 'var(--medical-blue)', fontSize: '1.2rem'}}>
+          {bootStep === 0 && '> INICIALIZANDO SEQUENCIADOR CODIS v2.4...'}
+          {bootStep === 1 && '> CALIBRANDO REAGENTES E LUZ FORENSE...'}
+          {bootStep === 2 && '> SISTEMA GENÉTICO ONLINE. AGUARDANDO ALIMENTAÇÃO MANUAL.'}
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="lab-container">
-      {showTutorial && (
-        <div className="popup-overlay">
-          <div className="popup-content">
-            <h2>🧬 POLITEC: Unidade de Genética</h2>
-            <p>Bem-vindo ao sistema cruzado de bases biométricas.</p>
-            <ul>
-              <li>O sistema exige alimentação manual. Digite os códigos exatamente como constam nos relatórios físicos ou fichas.</li>
-              <li>Códigos de evidência costumam iniciar com # (Ex: #AMX-09)</li>
-              <li>Códigos de indivíduos (CODIS) acompanham o padrão regional (Ex: PR-XXX-YYY)</li>
-              <li>Insira a amostra de material orgânico DE UM LADO e o código numérico do suspeito DO OUTRO.</li>
-            </ul>
-            <button onClick={() => setShowTutorial(false)} className="btn-modal">INICIALIZAR MÁQUINA</button>
-          </div>
-        </div>
-      )}
+
 
       <header>
         <div>
           <h1>SISTEMA CODIS</h1>
           <div className="system-id">POLITEC-PR :: DEPARTAMENTO DE GENÉTICA FORENSE</div>
         </div>
-        <img src="../../images/10.png" alt="Logo Lab" width="80" style={{filter: 'grayscale(100%)'}} />
+        <img src="./images/10.png" alt="Logo Lab" width="80" style={{filter: 'grayscale(100%)'}} />
       </header>
 
       {errorMsg && <div className="error-bar">⚠️ {errorMsg}</div>}
